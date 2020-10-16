@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface TimelineRepository extends JpaRepository<TimelinePost, Long> {
     public List<TimelinePost> findByUserNo(Long userNo);
+    public List<TimelinePost> findAllByUserNo(Long userNo);
 }

@@ -60,6 +60,7 @@ export default {
         { userNo, imageUrl, content })
         .then(res => {
           console.log('register Success')
+          location.reload()
         })
         .catch(err => {
           alert(err.response.data)

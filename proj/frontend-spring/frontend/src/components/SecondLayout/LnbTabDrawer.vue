@@ -30,7 +30,7 @@
       <v-tab-item style="width: 15%; height: 100vh">
         <v-navigation-drawer dark clipped>
           <v-list>
-            <v-list-item>
+            <v-list-item @click="gotoDashboard">
                 <v-list-item-title>Dashboard</v-list-item-title>
             </v-list-item>
           </v-list>
@@ -45,7 +45,7 @@
         <v-navigation-drawer dark clipped>
           <v-list>
             <v-list-item>
-              <v-list-item-title>Testing right nav</v-list-item-title>
+              <v-list-item-title>친구 목록 리스트</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-navigation-drawer>
@@ -62,8 +62,8 @@
       <v-tab-item style="width: 15%; height: 100vh">
         <v-navigation-drawer dark clipped>
           <v-list>
-            <v-list-item>
-              <v-list-item-title>Testing right nav</v-list-item-title>
+            <v-list-item @click="gotoMyPage">
+              <v-list-item-title @click="gotoMyPage">My Page</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-navigation-drawer>
@@ -77,6 +77,14 @@ export default {
   name: 'LnbTabDrawer',
   data () {
     return {
+    }
+  },
+  methods: {
+    gotoDashboard () {
+      this.$emit('gotoDashboard')
+    },
+    gotoMyPage () {
+      this.$emit('gotoMyPage')
     }
   }
 }

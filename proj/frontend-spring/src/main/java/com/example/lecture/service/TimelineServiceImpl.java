@@ -17,7 +17,7 @@ public class TimelineServiceImpl implements TimelineService{
 
     @Override
     public void register(TimelinePost timeline) throws Exception {
-        log.info("register: " + timeline);
+        log.info("register() - timeline: " + timeline);
 
         TimelinePost timelinePost = new TimelinePost();
         timelinePost.setUserNo(timeline.getUserNo());
@@ -31,6 +31,7 @@ public class TimelineServiceImpl implements TimelineService{
 
     @Override
     public List<TimelinePost> list(Long userNo) throws Exception {
-        return repository.findByUserNo(userNo);
+        log.info("list() - userNo: " + userNo);
+        return repository.findAllByUserNo(userNo);
     }
 }

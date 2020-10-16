@@ -1,7 +1,7 @@
 <template>
   <v-toolbar height="70%" style="background-color: rgba(255, 255, 255, 0)" flat>
     <p class="text-h6"
-       style="position: absolute; z-index: 2; left: 5.5%; top: 30%">
+       style="position: absolute; z-index: 2; left: 5%; top: 30%">
       {{ day }}
     </p>
     <v-icon size="50" style="position: absolute; z-index: 1; left: 4%">mdi-calendar-blank</v-icon>

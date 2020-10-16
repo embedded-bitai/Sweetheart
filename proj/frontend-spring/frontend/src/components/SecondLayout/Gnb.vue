@@ -12,7 +12,7 @@
             alt="John"
           >
         </v-avatar>
-        <h3 class="text-center white--text">user name</h3>
+        <h3 class="text-center white--text"></h3>
         <div class="text-center white--text">
           <h4 class="green--text">role</h4>
         </div>
