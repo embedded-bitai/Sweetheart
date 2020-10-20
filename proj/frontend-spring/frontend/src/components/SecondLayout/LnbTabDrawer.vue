@@ -30,13 +30,13 @@
       <v-tab-item style="width: 15%; height: 100vh">
         <v-navigation-drawer dark clipped>
           <v-list>
-            <v-list-item @click="gotoDashboard">
-                <v-list-item-title>Dashboard</v-list-item-title>
+            <v-list-item @click="gotoMyTimeline">
+              <v-list-item-title>My TimeLine</v-list-item-title>
             </v-list-item>
           </v-list>
           <v-list>
             <v-list-item>
-              <v-list-item-title>My TimeLine</v-list-item-title>
+                <v-list-item-title>Dashboard</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-navigation-drawer>
@@ -80,8 +80,8 @@ export default {
     }
   },
   methods: {
-    gotoDashboard () {
-      this.$emit('gotoDashboard')
+    gotoMyTimeline () {
+      this.$emit('gotoMyTimeline')
     },
     gotoMyPage () {
       this.$emit('gotoMyPage')

@@ -3,11 +3,11 @@
     <Gnb style="z-index: 1"></Gnb>
     <LnbTabDrawer
       style="position: fixed; z-index: 1; width: 90%"
-      @gotoDashboard="onGotoDashboard"
+      @gotoMyTimeline="gotoMyTimeline"
       @gotoMyPage="onGotoMypage"
     ></LnbTabDrawer>
     <div style="position: fixed; z-index: 2; left: 17.7%; top: 10%; width: 75%; border-radius: 10vh; overflow-y: scroll;">
-      <Timeline v-if="screenName == 'dashBoard'"></Timeline>
+      <Timeline v-if="screenName == 'myTimeline'"></Timeline>
       <MyPage
         v-if="screenName == 'myPage'"
       ></MyPage>
@@ -31,12 +31,12 @@ export default {
   },
   data () {
     return {
-      screenName: 'dashBoard'
+      screenName: 'myTimeline'
     }
   },
   methods: {
-    onGotoDashboard () {
-      this.screenName = 'dashBoard'
+    gotoMyTimeline () {
+      this.screenName = 'myTimeline'
     },
     onGotoMypage () {
       this.screenName = 'myPage'
