@@ -12,6 +12,7 @@
                       <FirstLeft
                         @increaseStep="increaseStep"
                         @signIn="onSignIn"
+                        @faceLogin="onFaceLogin"
                       >
                       </FirstLeft>
                     </v-col>
@@ -105,8 +106,7 @@ export default {
     onSignIn (payload) {
       console.log('Login on-sign-in()' + payload.userId)
       this.login(payload).then(res => {
-        alert('Login Success')
-        this.$router.push({ name: 'ScrollTestPage' })
+        this.onFaceLogin()
       }).catch(err => {
         console.log(err)
         alert('가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.')
@@ -115,7 +115,28 @@ export default {
     ...mapActions(['login']),
     onFaceDetecion () {
       console.log('on Face Detection')
-      axios.post('http://localhost')
+      axios.post('http://localhost:5000/faceDetection')
+        .then(res => {
+          alert('face register')
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    onFaceLogin () {
+      console.log('on Face Face Login')
+      axios.get('http://localhost:5000/faceLogin')
+        .then(res => {
+          alert('face login success')
+          console.log('res' + res.data)
+          if (res.data === 'Success') {
+            this.$router.push({ name: 'ScrollTestPage' })
+          }
+        })
+        .catch(err => {
+          alert('얼굴을 인식할 수 없습니다.')
+          console.log(err.response.data)
+        })
     }
   }
 }
