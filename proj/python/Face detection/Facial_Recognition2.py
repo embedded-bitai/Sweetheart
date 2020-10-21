@@ -26,5 +26,3 @@ model = cv2.face.LBPHFaceRecognizer_create()
 model.train(np.asarray(Training_Data), np.asarray(Labels))
 
 print("Model Training Complete!!!!!")
-
-
