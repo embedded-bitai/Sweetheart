@@ -63,6 +63,7 @@ export default {
   },
   [SET_ACCESS_TOKEN] (state, accessToken) {
     if (accessToken) {
+      console.log('SET_ACCESS_TOKEN() - accessToken: ' + accessToken)
       state.accessToken = accessToken
 
       axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`

@@ -1,16 +1,21 @@
 <template>
   <v-app>
-    <Gnb style="z-index: 1"></Gnb>
-    <LnbTabDrawer
-      style="position: fixed; z-index: 1; width: 90%"
-      @gotoMyTimeline="gotoMyTimeline"
-      @gotoMyPage="onGotoMypage"
-    ></LnbTabDrawer>
-    <div style="position: fixed; z-index: 2; left: 17.7%; top: 10%; width: 75%; border-radius: 10vh; overflow-y: scroll;">
-      <Timeline v-if="screenName == 'myTimeline'"></Timeline>
-      <MyPage
-        v-if="screenName == 'myPage'"
-      ></MyPage>
+    <div v-if="isAuthorized">
+      <Gnb style="z-index: 1; width: auto"></Gnb>
+      <LnbTabDrawer
+        style="position: fixed; z-index: 1; width: auto"
+        @gotoDashboard="onGotoDashboard"
+        @gotoMyPage="onGotoMypage"
+      ></LnbTabDrawer>
+      <div style="position: fixed; margin-left: 300px; z-index: 2; left: auto; top: 10%; width: 75%; border-radius: 15vh; height: 100vh">
+        <Timeline v-if="screenName == 'myTimeline'"></Timeline>
+        <MyPage
+          v-if="screenName == 'myPage'"
+        ></MyPage>
+      </div>
+    </div>
+    <div v-else>
+      로그인을 해주세요<br>
     </div>
   </v-app>
 </template>
@@ -18,8 +23,9 @@
 <script>
 import Gnb from '@/components/SecondLayout/Gnb'
 import LnbTabDrawer from '@/components/SecondLayout/LnbTabDrawer'
-import Timeline from '@/components/SecondLayout/Timeline'
+import Timeline from '@/components/TimeLine/Timeline'
 import MyPage from '@/components/Settings/MyPage'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ScrollTestPage',
@@ -35,12 +41,15 @@ export default {
     }
   },
   methods: {
-    gotoMyTimeline () {
+    onGotoDashboard () {
       this.screenName = 'myTimeline'
     },
     onGotoMypage () {
       this.screenName = 'myPage'
     }
+  },
+  computed: {
+    ...mapGetters(['isAuthorized'])
   }
 }
 </script>
