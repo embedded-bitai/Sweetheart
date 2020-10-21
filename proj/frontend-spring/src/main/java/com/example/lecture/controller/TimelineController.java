@@ -29,7 +29,7 @@ public class TimelineController {
         return new ResponseEntity<>(timelinePost, HttpStatus.OK);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/list/{userNo}")
     public ResponseEntity<List<TimelinePost>> list(@PathVariable("userNo") Long userNo) throws Exception {
         log.info("list() - userNo: " + userNo);
         List<TimelinePost> timelinePosts = timelineService.list(userNo);

@@ -177,6 +177,7 @@
                 v-bind="attrs"
                 v-on="on"
                 class="mt-3"
+                @click="face_detection"
               >
                 얼굴인식
               </v-btn>
@@ -285,6 +286,9 @@ export default {
       } else {
         alert('ID 중복체크를 수행하세요.')
       }
+    },
+    face_detection () {
+      this.$emit('faceDetecion', null)
     }
   }
 }

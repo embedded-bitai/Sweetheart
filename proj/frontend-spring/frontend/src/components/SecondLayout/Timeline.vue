@@ -12,7 +12,7 @@
     <v-layout id="contents_area">
       <v-flex id="left_area" style="width: 50%; height: max-content">
         <v-layout column>
-          <TimeLineGuestBook></TimeLineGuestBook>
+          <TimeLineGuestBook class="mb-5"></TimeLineGuestBook>
           <TimeLineChatList></TimeLineChatList>
         </v-layout>
       </v-flex>
