@@ -6,7 +6,7 @@
   >
     <v-row>
       <v-col cols="12" md="2">
-        <v-avatar size="70%" class="ml-10">
+        <v-avatar size="100px" class="ml-10">
           <img
             src="https://cdn.vuetifyjs.com/images/john.jpg"
             alt="John"

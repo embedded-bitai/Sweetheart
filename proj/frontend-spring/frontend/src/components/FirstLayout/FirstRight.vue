@@ -6,7 +6,7 @@
          <h1 class="text-center display-2">Login Recent!</h1>
        </v-card-text>
      </v-layout>
-     <v-layout justify-center class="green">
+     <v-layout justify-center>
        <v-badge
          avatar
          bordered

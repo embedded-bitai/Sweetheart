@@ -29,7 +29,7 @@ public class Member {
     private String userId;
 
     //@NotBlank
-    @Column(length = 100, nullable = false)
+    @Column(name = "user_Name", length = 100, nullable = false)
     private String userName;
 
     @Column(length = 100, nullable = false)
@@ -52,6 +52,9 @@ public class Member {
 
     @Column(length = 100, nullable = false)
     private String role;
+
+    @Column(name = "profileImg", length = 100, nullable = true)
+    private String profileImg;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @CreationTimestamp

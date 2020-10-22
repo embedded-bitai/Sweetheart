@@ -161,47 +161,18 @@
         <v-row>
           <v-checkbox
             label="얼굴 인식에 동의하십니까?"
-            color="success"
-            value="success"
             class="mr-10 ml-3"
             dark
+            v-model="checkFaceRegister"
           ></v-checkbox>
-          <v-dialog
-            v-model="slide"
-            width="500"
+          <v-btn
+            color="red lighten-2"
+            dark
+            class="mt-3"
+            @click="face_detection"
           >
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="red lighten-2"
-                dark
-                v-bind="attrs"
-                v-on="on"
-                class="mt-3"
-                @click="face_detection"
-              >
-                얼굴인식
-              </v-btn>
-            </template>
-            <v-card>
-              <v-card-title class="headline grey lighten-2">
-                얼굴인식
-              </v-card-title>
-              <v-card-text>
-                얼굴인식
-              </v-card-text>
-              <v-divider></v-divider>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  color="primary"
-                  text
-                  @click="slide = false"
-                >
-                  Finish
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+            얼굴인식
+          </v-btn>
         </v-row>
       </v-form>
     </v-card-text>
@@ -219,6 +190,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'SecondRight',
   data () {
@@ -246,7 +219,9 @@ export default {
         v => /(?=.*[A-Z])/.test(v) || 'Must have one uppercase character',
         v => /(?=.*\d)/.test(v) || 'Must have one number',
         v => /([!@$%])/.test(v) || 'Must have one special character [!@#$%]'
-      ]
+      ],
+      faceRegister: false,
+      checkFaceRegister: false
     }
   },
   watch: {
@@ -265,19 +240,25 @@ export default {
       this.$refs.menu.save(date)
     },
     idCertCheck () {
-      console.log('this.userId: ' + this.userId)
-      const { userId } = this
-      this.$emit('idCheck', { userId })
+      if (this.userId === '' || this.userId === null) {
+        alert('ID를 입력하세요.')
+      } else {
+        console.log('this.userId: ' + this.userId)
+        const { userId } = this
+        this.$emit('idCheck', { userId })
+      }
     },
     signUpPrev () {
-      if (this.userPassword !== this.userPasswordCert) {
+      if (this.userName === '' || this.userNickname === '' || this.userId === '' || this.userPassword === '' || this.userEmail === '' || this.address === '' || this.addressDetail === '') {
+        alert('빈칸이 있어선 안됩니다.')
+      } else if (this.userPassword !== this.userPasswordCert) {
         alert('비밀번호가 일치하지 않습니다.')
       } else {
         this.signUp()
       }
     },
     signUp () {
-      if (this.idValidate === true) {
+      if (this.idValidate && this.faceRegister) {
         this.totalAddress = this.roadAddress + ' ' + this.addressDetail
         console.log('total Address: ' + this.totalAddress)
         console.log('this: ' + this.userName + ', ' + this.userNickname + ', ' + this.userId + ', ' + this.date + ', ' + this.userGender + ', ' + this.userEmail + ', ' + this.totalAddress)
@@ -288,7 +269,30 @@ export default {
       }
     },
     face_detection () {
-      this.$emit('faceDetecion', null)
+      if (this.checkFaceRegister) {
+        console.log('on Face Detection')
+        return axios.post('http://localhost:5000/faceDetection')
+          .then(res => {
+            console.log('face register() - res: ' + res.data)
+          }).then(res => {
+            return axios.post('http://localhost:5000/faceLearning')
+          }).then(res => {
+            console.log('face learning() - res: ' + res.data)
+            this.faceRegister = true
+          }).catch(err => {
+            console.log(err)
+            axios.post('http://localhost:5000/rmFaceDir')
+              .then(res => {
+                console.log('rmdir() - res: ' + res.data)
+              })
+              .catch(err => {
+                console.log('rmdir() - err: ' + err.response())
+              })
+          })
+        // this.$emit('faceDetecion', null)
+      } else {
+        alert('얼굴 인식에 동의해주세요')
+      }
     }
   }
 }

@@ -11,4 +11,7 @@ public interface TimelineService {
 
     @Query("select * from from timeline_post where userNo = :userNo")
     public List<TimelinePost> list(@Param("user_no") Long userNo) throws Exception;
+
+    @Query("select * from from timeline_post")
+    public List<TimelinePost> listAll() throws Exception;
 }

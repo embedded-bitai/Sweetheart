@@ -27,21 +27,21 @@
         </v-icon>
       </v-tab>
 
-      <v-tab-item style="width: 15%; height: 100vh">
+      <v-tab-item style="width: 100%; height: 100vh">
         <v-navigation-drawer dark clipped>
           <v-list>
-            <v-list-item @click="gotoMyTimeline">
-              <v-list-item-title>My TimeLine</v-list-item-title>
+            <v-list-item @click="gotoDashboard">
+              <v-list-item-title>Dashboard</v-list-item-title>
             </v-list-item>
           </v-list>
           <v-list>
             <v-list-item>
-                <v-list-item-title>Dashboard</v-list-item-title>
+              <v-list-item-title>My TimeLine</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-navigation-drawer>
       </v-tab-item>
-      <v-tab-item style="width: 15%; height: 100vh">
+      <v-tab-item style="width: 100%; height: 100vh">
         <v-navigation-drawer dark clipped>
           <v-list>
             <v-list-item>
@@ -50,7 +50,7 @@
           </v-list>
         </v-navigation-drawer>
       </v-tab-item>
-      <v-tab-item style="width: 15%; height: 100vh">
+      <v-tab-item style="width: 100%; height: 100vh">
         <v-navigation-drawer dark clipped>
           <v-list>
             <v-list-item>
@@ -59,7 +59,7 @@
           </v-list>
         </v-navigation-drawer>
       </v-tab-item>
-      <v-tab-item style="width: 15%; height: 100vh">
+      <v-tab-item style="width: 100%; height: 100vh">
         <v-navigation-drawer dark clipped>
           <v-list>
             <v-list-item @click="gotoMyPage">
@@ -80,8 +80,8 @@ export default {
     }
   },
   methods: {
-    gotoMyTimeline () {
-      this.$emit('gotoMyTimeline')
+    gotoDashboard () {
+      this.$emit('gotoDashboard')
     },
     gotoMyPage () {
       this.$emit('gotoMyPage')

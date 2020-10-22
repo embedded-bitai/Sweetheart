@@ -34,4 +34,12 @@ public class TimelineServiceImpl implements TimelineService{
         log.info("list() - userNo: " + userNo);
         return repository.findAllByUserNo(userNo);
     }
+
+    @Override
+    public List<TimelinePost> listAll() throws Exception {
+        log.info("listAll()");
+        return repository.findAll();
+    }
+
+
 }

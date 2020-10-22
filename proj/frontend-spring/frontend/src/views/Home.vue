@@ -12,7 +12,6 @@
                       <FirstLeft
                         @increaseStep="increaseStep"
                         @signIn="onSignIn"
-                        @faceLogin="onFaceLogin"
                       >
                       </FirstLeft>
                     </v-col>
@@ -30,8 +29,8 @@
                       <SecondRight
                         @idCheck="onCheckId"
                         :id-validate="idValidate"
+                        :faceRegister="faceRegister"
                         @signUp="onSignUp"
-                        @faceDetecion="onFaceDetecion"
                       ></SecondRight>
                     </v-col>
                   </v-row>
@@ -47,10 +46,10 @@
 
 <script>
 // @ is an alias to /src
-import FirstLeft from '@/components/FirstLeft'
-import FirstRight from '@/components/FirstRight'
-import SecondLeft from '@/components/SecondLeft'
-import SecondRight from '@/components/SecondRight'
+import FirstLeft from '@/components/FirstLayout/FirstLeft'
+import FirstRight from '@/components/FirstLayout/FirstRight'
+import SecondLeft from '@/components/FirstLayout/SecondLeft'
+import SecondRight from '@/components/FirstLayout/SecondRight'
 import axios from 'axios'
 import { mapActions } from 'vuex'
 
@@ -65,7 +64,8 @@ export default {
   data () {
     return {
       step: 1,
-      idValidate: false
+      idValidate: false,
+      faceRegister: false
     }
   },
   methods: {
@@ -104,40 +104,16 @@ export default {
         })
     },
     onSignIn (payload) {
-      console.log('Login on-sign-in()' + payload.userId)
+      console.log('Login on-sign-in() - ' + payload.userId)
       this.login(payload).then(res => {
-        this.onFaceLogin()
+        console.log('onSignIn() res: ' + res)
+        this.$router.push({ name: 'ScrollTestPage' })
       }).catch(err => {
         console.log(err)
         alert('가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.')
       })
     },
-    ...mapActions(['login']),
-    onFaceDetecion () {
-      console.log('on Face Detection')
-      axios.post('http://localhost:5000/faceDetection')
-        .then(res => {
-          alert('face register')
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    },
-    onFaceLogin () {
-      console.log('on Face Face Login')
-      axios.get('http://localhost:5000/faceLogin')
-        .then(res => {
-          alert('face login success')
-          console.log('res' + res.data)
-          if (res.data === 'Success') {
-            this.$router.push({ name: 'ScrollTestPage' })
-          }
-        })
-        .catch(err => {
-          alert('얼굴을 인식할 수 없습니다.')
-          console.log(err.response.data)
-        })
-    }
+    ...mapActions(['login'])
   }
 }
 </script>

@@ -37,4 +37,12 @@ public class TimelineController {
         return new ResponseEntity<>(timelinePosts, HttpStatus.OK);
     }
 
+    @GetMapping("/list/all")
+    public ResponseEntity<List<TimelinePost>> listAll() throws Exception {
+        log.info("listAll()" );
+        List<TimelinePost> timelinePosts = timelineService.listAll();
+
+        return new ResponseEntity<>(timelinePosts, HttpStatus.OK);
+    }
+
 }

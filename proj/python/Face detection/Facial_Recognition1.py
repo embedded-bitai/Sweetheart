@@ -1,14 +1,12 @@
 import cv2
 import numpy as np
-from os import makedirs
-from os.path import isdir
-from flask import Flask, jsonify
-from flask_restful import Resource, Api, reqparse
+from flask import Flask
+from flask_restful import Api
 from flask_cors import CORS
 import os
 from os import listdir
 from os.path import isfile, join
-import sys
+import shutil
 
 #얼굴 저장 함수
 face_dirs = 'faces/'
@@ -28,14 +26,9 @@ def face_extractor(img):
 
     return cropped_face
 
-# 얼굴만 저장하는 함수
-# def take_pictures(name):
-#     if not isdir(face_dirs+name):
-#         makedirs(face_dirs+name)
-
 # 카메라 ON
 def face_detection():
-    print('face_detection')
+    print('face_detection()')
     cap = cv2.VideoCapture(0)
     count = 0
     while True:
@@ -64,10 +57,11 @@ def face_detection():
     cap.release()
     cv2.destroyAllWindows()
     print('Colleting Samples Complete!!!')
-    face_learning()
+
+    return 'register'
 
 def face_learning():
-    print('face_learning')
+    print('face_learning()')
     data_path = 'faces/'
     # faces폴데 있는 파일 리스트 얻기
     onlyfiles = [f for f in listdir(data_path) if isfile(join(data_path, f))]
@@ -92,7 +86,9 @@ def face_learning():
 
     print("Model Training Complete!!!!!")
 
-def face_detector(img, size=0.5):
+    return "learning"
+
+def face_detector(img, size = 0.5):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = face_classifier.detectMultiScale(gray, 1.3, 5)
 
@@ -106,8 +102,8 @@ def face_detector(img, size=0.5):
 
     return img, roi
 
-def on_face_login():
-    print('on_face_login()')
+def face_login():
+    print('face_login()')
     data_path = 'faces/'
     onlyfiles = [f for f in listdir(data_path) if isfile(join(data_path, f))]
 
@@ -122,10 +118,6 @@ def on_face_login():
     Labels = np.asarray(Labels, dtype=np.int32)
     model = cv2.face.LBPHFaceRecognizer_create()
     model.train(np.asarray(Training_Data), np.asarray(Labels))
-
-    print("Model Training Complete!!!!!")
-
-    face_classifier = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
     # 카메라 열기
     cap = cv2.VideoCapture(0)
@@ -147,11 +139,11 @@ def on_face_login():
                 display_string = str(confidence) + '% Confidence it is user'
                 cv2.putText(image, display_string, (100, 120), cv2.FONT_HERSHEY_COMPLEX, 1, (250, 120, 255), 2)
 
-            # 87 이상이면 동일 인물(수정가능)
+            # 80 이상이면 동일 인물(수정가능)
             if confidence > 80:
                 cv2.putText(image, "Unlocked", (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
                 cv2.imshow('Face Cropper', image)
-                return "Success"
+                break
 
             else:
                 # 87 이하면 unlocked
@@ -169,22 +161,46 @@ def on_face_login():
 
     cap.release()
     cv2.destroyAllWindows()
+    print('Face Login Success!!!!')
+
+    return "Success"
+
 
 app = Flask(__name__)
 api = Api(app)
 CORS(app, resources={r'/*': {'origins': '*'}})
 
 @app.route('/faceDetection', methods=['POST'])
-def face_register():
-    print('face register()')
-    face_detection()
-    return "face detection success"
+def on_face_register():
+    os.makedirs('faces', exist_ok=True)
+    print('face_register()')
+    registerResult = face_detection()
+    print('face register return(): ' + registerResult)
+
+    return registerResult
+
+@app.route('/faceLearning', methods=['POST'])
+def on_face_learning():
+    print('on_face_learning()')
+    learningResult = face_learning()
+    print('face learning return(): ' + learningResult)
+
+    return learningResult
 
 @app.route('/faceLogin', methods=['GET'])
-def face_login():
-    returnResult = on_face_login()
-    print(returnResult)
-    return returnResult
+def on_face_login():
+    print('on_face_login()')
+    loginResult = face_login()
+    print('face_login() return: ' + loginResult)
+
+    return loginResult
+
+@app.route('/rmFaceDir', methods=['POST'])
+def on_rm_face_img():
+    print('rm_face_img()')
+    shutil.rmtree('faces')
+
+    return 'remove faces directory'
 
 if __name__ == '__main__':
     app.run(host='localhost', port=os.getenv('FLASK_RUN_PORT'), debug=os.getenv('FLASK_DEBUG'))

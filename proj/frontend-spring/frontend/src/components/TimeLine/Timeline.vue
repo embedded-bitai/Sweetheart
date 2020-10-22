@@ -24,11 +24,11 @@
 </template>
 
 <script>
-import TimeLineHeader from '@/components/SecondLayout/TimeLineHeader'
-import TimelineRecent from '@/components/SecondLayout/TimelineRecent'
-import TimeLineGuestBook from '@/components/SecondLayout/TimeLineGuestBook'
-import TimeLineChatList from '@/components/SecondLayout/TimeLineChatList'
-import TimeLinePost from '@/components/SecondLayout/TimeLinePost'
+import TimeLineHeader from '@/components/TimeLine/TimeLineHeader'
+import TimelineRecent from '@/components/TimeLine/TimelineRecent'
+import TimeLineGuestBook from '@/components/TimeLine/TimeLineGuestBook'
+import TimeLineChatList from '@/components/TimeLine/TimeLineChatList'
+import TimeLinePost from '@/components/TimeLine/TimeLinePost'
 
 export default {
   name: 'Timeline',

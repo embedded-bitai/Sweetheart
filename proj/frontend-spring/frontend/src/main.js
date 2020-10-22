@@ -5,11 +5,9 @@ import store from './store/index'
 import cookies from 'vue-cookies'
 import vuex from 'vuex'
 import vuetify from './plugins/vuetify'
-import VueWindowSize from 'vue-window-size'
 import VueDaumPostcode from 'vue-daum-postcode'
 
 Vue.use(VueDaumPostcode)
-Vue.use(VueWindowSize)
 
 Vue.config.productionTip = false
 Vue.use(cookies)

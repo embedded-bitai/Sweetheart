@@ -11,7 +11,7 @@
           </v-flex>
           <v-flex>
             <v-layout class="mt-2" column>
-              <span class="text-h7">이름</span>
+              <span class="text-h7">{{ this.name }}</span>
               <span class="text-h7">{{ timeline.regDate }}</span>
 <!--              <span v-if="timeline[idx].regDate" class="text-h9">{{ timeline[0].regDate }}</span>-->
             </v-layout>
@@ -32,14 +32,16 @@ export default {
   name: 'TimeLinePost',
   data () {
     return {
+      name: this.$store.state.myProfile.name,
       image: null,
+      regDate: null,
       contents: null,
       timelinePost: []
     }
   },
   created () {
-    const userNo = this.$store.state.myInfo.userNo
-    axios.get(`http://localhost:7777/timeline/list/${userNo}`)
+    // const userNo = this.$store.state.myInfo.userNo
+    axios.get('http://localhost:7777/timeline/list/all/')
       .then(res => {
         console.log('get timeline post')
         this.timelinePost = res.data
@@ -47,6 +49,14 @@ export default {
       .catch(err => {
         console.log('created()' + err.response)
       })
+    // axios.get(`http://localhost:7777/timeline/list/${userNo}`)
+    //   .then(res => {
+    //     console.log('get timeline post')
+    //     this.timelinePost = res.data
+    //   })
+    //   .catch(err => {
+    //     console.log('created()' + err.response)
+    //   })
   }
 }
 </script>
