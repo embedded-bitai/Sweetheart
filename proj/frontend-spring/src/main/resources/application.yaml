@@ -27,13 +27,12 @@ spring:
     protocol: smtp
     default-encoding: UTF-8
     username: 15481079lee@gmail.com
-    password: Dlwlsgh1!
+    password: mbczepfpotthqbya
     tls: true
-    setTLS: true
     properties.mail.smtp:
-      ssl.trust: smtp.gmail.com
-      start.enable: true
       auth: true
+      starttls.enable: true
+      ssl.trust: smtp.gmail.com
 
 logging:
   level:

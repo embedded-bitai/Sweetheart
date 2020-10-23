@@ -288,9 +288,9 @@ export default {
       if (this.certNum === '' || this.certNum === null) {
         alert('인증 번호를 입력하세요.')
       } else {
-        console.log('this.certNum: ' + this.certNum)
-        const { certNum } = this
-        this.$emit('certNumCheck', { certNum })
+        console.log('this.certNum: ' + this.certNum + ', userEmail: ' + this.userEmail)
+        const { certNum, userEmail } = this
+        this.$emit('certNumCheck', { certNum, userEmail })
       }
     },
     signUpPrev () {

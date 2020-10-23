@@ -18,19 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
-import java.util.Properties;
-
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import com.example.lecture.email.ReusableRequestWrapper;
 
 @Log
 @RestController
@@ -148,46 +138,22 @@ public class MemberController {
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/checkEmail")
-    public ResponseEntity<String> checkEmail(@Validated @RequestBody String userEmail) throws Exception {
-        log.info("checkId() - userEmail: " + userEmail);
-        String[] userIdArr = userEmail.split(":");
-        String userIdString1 = userIdArr[1].replace("\"", "");
-        String userIdString2 = userIdString1.replace("}", "");
-
-        if (service.checkId(userIdString2) == false) {
-            return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
-        }
-
-        String message = messageSource.getMessage("common.cannotCheckUserId",
-                null, Locale.KOREAN);
-
-        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
-    }
-
-    @PostMapping("/email")
-    public int sendmail(HttpServletRequest request, @Validated @RequestBody String userEmail) throws Exception {
-        log.info("sendmail() - userEmail: " + userEmail);
-        String[] userIdArr = userEmail.split(":");
-        String userIdString1 = userIdArr[1].replace("\"", "");
-        String userIdString2 = userIdString1.replace("}", "");
-
-//        java.security.Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
-
-        HttpSession session = request.getSession();
-        service.mailSend(session, userIdString2);
-
-        return 123;
-    }
-
-    @PostMapping("/email/certification")
-    public boolean emailCertification(HttpServletRequest request, String userEmail, String inputCode) throws Exception {
-        log.info("emailCertification() userEmail: " + userEmail + ", inputCode: " + inputCode);
-        HttpSession session = request.getSession();
-        boolean result = service.emailCertification(session, userEmail, Integer.parseInt(inputCode));
-
-        return result;
-    }
+//    @PostMapping("/checkEmail")
+//    public ResponseEntity<String> checkEmail(@Validated @RequestBody String userEmail) throws Exception {
+//        log.info("checkId() - userEmail: " + userEmail);
+//        String[] userIdArr = userEmail.split(":");
+//        String userIdString1 = userIdArr[1].replace("\"", "");
+//        String userIdString2 = userIdString1.replace("}", "");
+//
+//        if (service.checkId(userIdString2) == false) {
+//            return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+//        }
+//
+//        String message = messageSource.getMessage("common.cannotCheckUserId",
+//                null, Locale.KOREAN);
+//
+//        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+//    }
 
     @GetMapping("/myAuthInfo")
     public ResponseEntity<MemberAuth> getMyAuthInfo(
@@ -208,5 +174,29 @@ public class MemberController {
         String userId = service.findId(searchName, searchEmail);
 
         return new ResponseEntity<>(userId, HttpStatus.OK);
+    }
+
+    @PostMapping("/email")
+    public int sendmail(HttpServletRequest request, @RequestBody String userEmail) throws Exception {
+        log.info("sendmail() - userEmail: " + userEmail);
+        String[] userIdArr = userEmail.split(":");
+        String userIdString1 = userIdArr[1].replace("\"", "");
+        String userIdString2 = userIdString1.replace("}", "");
+
+        HttpSession session = request.getSession();
+        service.mailSend(session, userIdString2);
+
+        return 123;
+    }
+
+    @PostMapping("/email/certification")
+    public boolean emailCertification(HttpServletRequest request, @Validated @RequestBody String certNum, @Validated @RequestBody String userEmail) throws Exception {
+        log.info("emailCertification() certNum: " + certNum + ", userEmail: " + userEmail);
+
+        HttpSession session = request.getSession();
+
+        boolean result = service.emailCertification(session, userEmail, Integer.parseInt(certNum));
+
+        return result;
     }
 }

@@ -149,9 +149,10 @@ export default {
         })
     },
     onCertNumCheck (payload) {
-      console.log('payload: ' + payload.certNum)
-      const { certNum } = payload
-      axios.post('http://localhost:7777/users/email/certification', { certNum })
+      console.log('payload - certNum: ' + payload.certNum + ', email: ' + payload.userEmail)
+      const { certNum, userEmail } = payload
+      axios.post('http://localhost:7777/users/email/certification',
+        { certNum, userEmail })
         .then(res => {
           alert('본인인증 성공')
           console.log('email check() res: ' + res)

@@ -5,6 +5,7 @@ buildscript {
 	repositories {
 		mavenCentral()
 		jcenter()
+		google()
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -30,7 +31,11 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven {
+		url "https://maven.java.net/content/groups/public/"
+	}
 	jcenter()
+	google()
 }
 
 dependencies {
@@ -53,8 +58,12 @@ dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-mail'
 	compile 'javax.xml.bind:jaxb-api:2.3.1'
 	compile 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+	compile group: 'javax.mail', name: 'javax.mail-api', version: '1.6.2'
+	compile "org.springframework:spring-context-support"
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	compile 'org.springframework.boot:spring-boot-starter-mail'
+	compile fileTree(dir: 'libs', include: '*.jar')
 	annotationProcessor 'org.projectlombok:lombok'
 	compile group: 'commons-io', name: 'commons-io', version: '2.7'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
