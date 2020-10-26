@@ -21,6 +21,19 @@ spring:
     serialization:
       fail-on-empty-beans: false
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    protocol: smtp
+    default-encoding: UTF-8
+    username: 15481079lee@gmail.com
+    password: mbczepfpotthqbya
+    tls: true
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+      ssl.trust: smtp.gmail.com
+
 logging:
   level:
     org:

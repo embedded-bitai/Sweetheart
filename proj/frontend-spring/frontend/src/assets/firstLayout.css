@@ -1,0 +1,50 @@
+
+.dashBoard{
+    background-color: darkgrey;
+    width: 100%;
+    height: 200vh;
+}
+/* DashBoard */
+
+.fistLeftSideMenu {
+    margin: 30px 10px 10px 10px;
+    padding: 10px;
+}
+/* LeftSideMenu */
+
+.timeLine {
+    margin: 10px 10px 10px 10px;
+    padding: 0 35px 10px 0;
+}
+/* TimeLine */
+
+.appBarMidIcon {
+    margin: 10px;
+    padding: 10px;
+}
+/* AppBar */
+
+.rightSideNews {
+    margin: 10px 10px 10px 10px;
+}
+/* rightSideNews */
+
+.rightSideAd {
+    margin: 0 10px 10px 10px;
+}
+/* rightSideAd */
+
+#cardTestOne {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#cardTestTwo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+/* TimeLine 카드*/
+
+
+

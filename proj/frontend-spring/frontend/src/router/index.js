@@ -4,6 +4,10 @@ import Home from '../views/Home.vue'
 
 import ScrollTestPage from '@/views/ScrollTestPage'
 
+import MainDashBoard from '@/components/FirstLayout/MainDashBoard'
+import FirstPage from '@/views/FirstPage'
+import test from '@/components/FirstLayout/test'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -21,6 +25,21 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: test
+  },
+  {
+    path: '/MainDashBoard',
+    name: 'MainDashBoard',
+    component: MainDashBoard
+  },
+  {
+    path: '/firstPage',
+    name: 'FirstPage',
+    component: FirstPage
   }
 ]
 

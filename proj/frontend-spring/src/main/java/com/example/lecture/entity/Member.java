@@ -91,4 +91,14 @@ public class Member {
     public void clearTimeLinePost() {
         authList.clear();
     }
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_no")
+    private Set<Friends> friends = new HashSet<Friends>();
+    public void addFriends(Friends friend) {
+        friends.add(friend);
+    }
+    public void clearFriends() {
+        friends.clear();
+    }
 }

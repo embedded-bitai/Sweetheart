@@ -102,15 +102,37 @@
             v-model="userGender"
           ></v-select>
         </v-row>
-        <v-text-field
-          label="Email"
-          name="Email"
-          prepend-icon="email"
-          type="text"
-          class="ma-0 pa-0"
-          :rules="[v => !!v || 'Email is required', v => /.+@.+/.test(v) || 'E-mail must be valid']"
-          v-model="userEmail"
-          dark />
+        <v-row>
+          <v-col>
+            <v-text-field
+              label="Email"
+              name="Email"
+              prepend-icon="email"
+              type="text"
+              class="ma-0 pa-0"
+              :rules="[v => !!v || 'Email is required', v => /.+@.+/.test(v) || 'E-mail must be valid']"
+              v-model="userEmail"
+              dark />
+          </v-col>
+          <v-col>
+            <v-btn rounded color="teal" @click="emailCertCheck">인증번호 받기</v-btn>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-text-field
+              label="인증번호"
+              name="certNum"
+              prepend-icon="email"
+              type="text"
+              class="ma-0 pa-0"
+              v-model="certNum"
+              dark />
+          </v-col>
+          <v-col>
+            <v-btn rounded color="teal" @click="certNumCheck">인증하기</v-btn>
+          </v-col>
+        </v-row>
         <v-row>
           <v-col>
             <v-text-field
@@ -221,7 +243,8 @@ export default {
         v => /([!@$%])/.test(v) || 'Must have one special character [!@#$%]'
       ],
       faceRegister: false,
-      checkFaceRegister: false
+      checkFaceRegister: false,
+      certNum: ''
     }
   },
   watch: {
@@ -231,6 +254,10 @@ export default {
   },
   props: {
     idValidate: {
+      type: Boolean,
+      required: true
+    },
+    emailValidate: {
       type: Boolean,
       required: true
     }
@@ -246,6 +273,24 @@ export default {
         console.log('this.userId: ' + this.userId)
         const { userId } = this
         this.$emit('idCheck', { userId })
+      }
+    },
+    emailCertCheck () {
+      if (this.userEmail === '' || this.userEmail === null) {
+        alert('이메일을 입력하세요.')
+      } else {
+        console.log('this.userEmail: ' + this.userEmail)
+        const { userEmail } = this
+        this.$emit('emailCheck', { userEmail })
+      }
+    },
+    certNumCheck () {
+      if (this.certNum === '' || this.certNum === null) {
+        alert('인증 번호를 입력하세요.')
+      } else {
+        console.log('this.certNum: ' + this.certNum + ', userEmail: ' + this.userEmail)
+        const { certNum, userEmail } = this
+        this.$emit('certNumCheck', { certNum, userEmail })
       }
     },
     signUpPrev () {
@@ -289,7 +334,6 @@ export default {
                 console.log('rmdir() - err: ' + err.response())
               })
           })
-        // this.$emit('faceDetecion', null)
       } else {
         alert('얼굴 인식에 동의해주세요')
       }

@@ -12,6 +12,8 @@
                       <FirstLeft
                         @increaseStep="increaseStep"
                         @signIn="onSignIn"
+                        @findId="onFindId"
+                        :searchId = "searchId"
                       >
                       </FirstLeft>
                     </v-col>
@@ -28,9 +30,12 @@
                     <v-col id="secondRight" cols="12" md="8">
                       <SecondRight
                         @idCheck="onCheckId"
+                        @emailCheck="onEmailCheck"
                         :id-validate="idValidate"
+                        :emailValidate="emailValidate"
                         :faceRegister="faceRegister"
                         @signUp="onSignUp"
+                        @certNumCheck="onCertNumCheck"
                       ></SecondRight>
                     </v-col>
                   </v-row>
@@ -46,10 +51,10 @@
 
 <script>
 // @ is an alias to /src
-import FirstLeft from '@/components/FirstLayout/FirstLeft'
-import FirstRight from '@/components/FirstLayout/FirstRight'
-import SecondLeft from '@/components/FirstLayout/SecondLeft'
-import SecondRight from '@/components/FirstLayout/SecondRight'
+import FirstLeft from '@/components/LoginLayout/FirstLeft'
+import FirstRight from '@/components/LoginLayout/FirstRight'
+import SecondLeft from '@/components/LoginLayout/SecondLeft'
+import SecondRight from '@/components/LoginLayout/SecondRight'
 import axios from 'axios'
 import { mapActions } from 'vuex'
 
@@ -65,7 +70,9 @@ export default {
     return {
       step: 1,
       idValidate: false,
-      faceRegister: false
+      emailValidate: false,
+      faceRegister: false,
+      searchId: ''
     }
   },
   methods: {
@@ -75,6 +82,7 @@ export default {
     decreaseStep () {
       this.step--
     },
+    ...mapActions(['login', 'findId']),
     onCheckId (payload) {
       console.log('payload: ' + payload.userId)
       const { userId } = payload
@@ -113,7 +121,53 @@ export default {
         alert('가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.')
       })
     },
-    ...mapActions(['login'])
+    onFindId (payload) {
+      console.log('on find id() - payload: ' + payload.searchName + ', ' + payload.searchEmail)
+      const { searchName, searchEmail } = payload
+      axios.get('http://localhost:7777/users/findID', {
+        params: {
+          searchName: searchName,
+          searchEmail: searchEmail
+        }
+      }).then(res => {
+        console.log('findId() - res: ' + res.data)
+        this.searchId = res.data
+      }).catch(err => {
+        console.log('findId() - err: ' + err)
+      })
+    },
+    onEmailCheck (payload) {
+      console.log('payload: ' + payload.userEmail)
+      const { userEmail } = payload
+      axios.post('http://localhost:7777/users/email',
+        { userEmail })
+        .then(res => {
+          console.log('send to code: ' + res.data)
+        })
+        .catch(err => {
+          console.log(err.response.data)
+        })
+    },
+    onCertNumCheck (payload) {
+      console.log('payload - certNum: ' + payload.certNum + ', email: ' + payload.userEmail)
+      const { certNum, userEmail } = payload
+      axios.get('http://localhost:7777/users/email/certification', {
+        params: {
+          certNum: certNum,
+          userEmail: userEmail
+        }
+      })
+        .then(res => {
+          alert('본인인증 성공')
+          console.log('email check() res: ' + res)
+          this.idValidate = true
+        })
+        .catch(err => {
+          console.log(err.response.data)
+          alert('본인인증 실패')
+          this.emailValidate = false
+        })
+    }
   }
 }
 </script>

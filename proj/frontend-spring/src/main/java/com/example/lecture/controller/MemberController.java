@@ -16,8 +16,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Locale;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.*;
+
+import com.example.lecture.email.ReusableRequestWrapper;
 
 @Log
 @RestController
@@ -68,16 +71,16 @@ public class MemberController {
 
         return new ResponseEntity<>(member, HttpStatus.OK);
     }
-//
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-//    @DeleteMapping("/{userNo}")
-//    public ResponseEntity<Void> remove(@PathVariable("userNo") String userNo) throws Exception {
-//        log.info("remove - userNo: " + userNo);
-//        long userNoLong = Long.parseLong(userNo);
-//        service.remove(userNoLong);
-//
-//        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-//    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{userNo}")
+    public ResponseEntity<Void> remove(@PathVariable("userNo") String userNo) throws Exception {
+        log.info("remove - userNo: " + userNo);
+        long userNoLong = Long.parseLong(userNo);
+        service.remove(userNoLong);
+
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+    }
 
 //    @PutMapping("/{userNo}")
 //    public ResponseEntity<Member> modify(@PathVariable("userNo") Long userNo,
@@ -135,6 +138,23 @@ public class MemberController {
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 
+//    @PostMapping("/checkEmail")
+//    public ResponseEntity<String> checkEmail(@Validated @RequestBody String userEmail) throws Exception {
+//        log.info("checkId() - userEmail: " + userEmail);
+//        String[] userIdArr = userEmail.split(":");
+//        String userIdString1 = userIdArr[1].replace("\"", "");
+//        String userIdString2 = userIdString1.replace("}", "");
+//
+//        if (service.checkId(userIdString2) == false) {
+//            return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+//        }
+//
+//        String message = messageSource.getMessage("common.cannotCheckUserId",
+//                null, Locale.KOREAN);
+//
+//        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+//    }
+
     @GetMapping("/myAuthInfo")
     public ResponseEntity<MemberAuth> getMyAuthInfo(
             @RequestHeader (name="Authorization") String header) throws Exception {
@@ -147,10 +167,42 @@ public class MemberController {
         return new ResponseEntity<>(auth, HttpStatus.OK);
     }
 
-//    @GetMapping("/myInfo")
-//    public ResponseEntity<Member> getMyInfo(
-//            @RequestHeader (name="Authorization") String userNo) throws Exception {
-//
-//        return new ResponseEntity<>(auth, HttpStatus.OK);
-//    }
+    @GetMapping("/findID")
+    public ResponseEntity<String> findId(@RequestParam(value = "searchName") String searchName, @RequestParam(value = "searchEmail") String searchEmail) throws Exception {
+        log.info("findID() - userName: " + searchName + ", userEmail: " + searchEmail);
+
+        String userId = service.findId(searchName, searchEmail);
+
+        return new ResponseEntity<>(userId, HttpStatus.OK);
+    }
+
+    private HttpSession sessionResult;
+
+    @PostMapping("/email")
+    public int sendmail(HttpServletRequest request, @RequestBody String userEmail) throws Exception {
+        log.info("sendmail() - request: + " + request);
+        log.info("sendmail() - userEmail: " + userEmail);
+        String[] userIdArr = userEmail.split(":");
+        String userIdString1 = userIdArr[1].replace("\"", "");
+        String userIdString2 = userIdString1.replace("}", "");
+
+        HttpSession session = request.getSession();
+        sessionResult = session;
+
+        service.mailSend(session, userIdString2);
+
+        return 123;
+    }
+
+    @GetMapping("/email/certification")
+    public boolean emailCertification(@RequestParam(value = "certNum") String certNum, @RequestParam(value = "userEmail") String userEmail) throws Exception {
+//        log.info("emailCertification() - request: + " + request);
+        log.info("emailCertification() - certNum: " + certNum + ", userEmail: " + userEmail);
+
+//        HttpSession session = request.getSession();
+
+        boolean result = service.emailCertification(sessionResult, userEmail, Integer.parseInt(certNum));
+
+        return result;
+    }
 }

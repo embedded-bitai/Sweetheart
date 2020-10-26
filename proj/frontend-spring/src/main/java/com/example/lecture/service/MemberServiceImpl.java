@@ -6,8 +6,13 @@ import com.example.lecture.repository.MemberRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -94,10 +99,12 @@ public class MemberServiceImpl implements MemberService {
 //
 //        repository.save(mem);
 //    }
-//    @Override
-//    public void remove(Long userNo) throws Exception {
-//        repository.deleteById(userNo);
-//    }
+
+    @Override
+    public void remove(Long userNo) throws Exception {
+        repository.deleteById(userNo);
+    }
+
 //    @Override
 //    public List<Member> list() throws Exception {
 //        List<Object[]> valArrays = repository.listAllMember();
@@ -140,5 +147,75 @@ public class MemberServiceImpl implements MemberService {
         return false;
     }
 
+    @Override
+    public boolean checkEmail(String userEmail) throws Exception {
+        log.info("checkId() - userEmail: " + userEmail);
 
+        return false;
+    }
+
+    @Override
+    public String findId(String userName, String userEmail) throws Exception {
+        log.info("findId() - userName: "+userName+", userEmail: "+userEmail);
+        String userId = repository.findUserIdByNameAndEmail(userName, userEmail);
+
+        if(userId.isEmpty()) {
+            log.info("ID가 존재하지 않습니다.");
+        }
+
+        return userId;
+    }
+
+    @Autowired
+    private JavaMailSenderImpl javaMailSenderImpl;
+
+    @Override
+    public int mailSend(HttpSession session, String userEmail) throws Exception {
+        log.info("mailSend() - userEmail: " + userEmail);
+        try {
+            MailHandler mailHandler = new MailHandler(javaMailSenderImpl);
+            Random random = new Random(System.currentTimeMillis());
+            long start = System.currentTimeMillis();
+
+            int result = 100000 + random.nextInt(900000);
+
+            mailHandler.setTo(userEmail);
+            mailHandler.setFrom("developer@gmail.com");
+            mailHandler.setSubject("인증번호입니다");
+            String htmlContent = "<p>인증번호: + "+result+"</p>";
+            mailHandler.setText(htmlContent, true);
+            mailHandler.send();
+
+            long end = System.currentTimeMillis();
+
+            session.setAttribute(userEmail, result);
+            log.info("userEmail: " + userEmail + "result: " + result + "실행 시간: " + (end - start )/1000.0);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean emailCertification(HttpSession session, String userEmail, int inputCode) throws Exception {
+        log.info("emailCertification() - userEmail: " + userEmail + ", inputCode: " + inputCode);
+        try {
+            int generationCode = (int)session.getAttribute(userEmail);
+
+            if(generationCode == inputCode){
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            throw  e;
+        }
+    }
+
+    @Override
+    public void makeFriends(String userId) throws Exception {
+        log.info("makeFriends() - userId: " + userId);
+
+    }
 }
