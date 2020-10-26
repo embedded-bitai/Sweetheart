@@ -71,16 +71,16 @@ public class MemberController {
 
         return new ResponseEntity<>(member, HttpStatus.OK);
     }
-//
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-//    @DeleteMapping("/{userNo}")
-//    public ResponseEntity<Void> remove(@PathVariable("userNo") String userNo) throws Exception {
-//        log.info("remove - userNo: " + userNo);
-//        long userNoLong = Long.parseLong(userNo);
-//        service.remove(userNoLong);
-//
-//        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-//    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{userNo}")
+    public ResponseEntity<Void> remove(@PathVariable("userNo") String userNo) throws Exception {
+        log.info("remove - userNo: " + userNo);
+        long userNoLong = Long.parseLong(userNo);
+        service.remove(userNoLong);
+
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+    }
 
 //    @PutMapping("/{userNo}")
 //    public ResponseEntity<Member> modify(@PathVariable("userNo") Long userNo,
@@ -176,26 +176,32 @@ public class MemberController {
         return new ResponseEntity<>(userId, HttpStatus.OK);
     }
 
+    private HttpSession sessionResult;
+
     @PostMapping("/email")
     public int sendmail(HttpServletRequest request, @RequestBody String userEmail) throws Exception {
+        log.info("sendmail() - request: + " + request);
         log.info("sendmail() - userEmail: " + userEmail);
         String[] userIdArr = userEmail.split(":");
         String userIdString1 = userIdArr[1].replace("\"", "");
         String userIdString2 = userIdString1.replace("}", "");
 
         HttpSession session = request.getSession();
+        sessionResult = session;
+
         service.mailSend(session, userIdString2);
 
         return 123;
     }
 
-    @PostMapping("/email/certification")
-    public boolean emailCertification(HttpServletRequest request, @Validated @RequestBody String certNum, @Validated @RequestBody String userEmail) throws Exception {
-        log.info("emailCertification() certNum: " + certNum + ", userEmail: " + userEmail);
+    @GetMapping("/email/certification")
+    public boolean emailCertification(@RequestParam(value = "certNum") String certNum, @RequestParam(value = "userEmail") String userEmail) throws Exception {
+//        log.info("emailCertification() - request: + " + request);
+        log.info("emailCertification() - certNum: " + certNum + ", userEmail: " + userEmail);
 
-        HttpSession session = request.getSession();
+//        HttpSession session = request.getSession();
 
-        boolean result = service.emailCertification(session, userEmail, Integer.parseInt(certNum));
+        boolean result = service.emailCertification(sessionResult, userEmail, Integer.parseInt(certNum));
 
         return result;
     }

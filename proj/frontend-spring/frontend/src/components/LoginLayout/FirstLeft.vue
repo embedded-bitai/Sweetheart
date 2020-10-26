@@ -92,6 +92,14 @@
         <v-card>
           <v-card-title class="headline">
             비밀번호 찾기
+            <v-spacer></v-spacer>
+            <v-btn
+              color="green darken-1"
+              text
+              @click="dialog = false"
+            >
+              Close
+            </v-btn>
           </v-card-title>
           <v-card-text>
             <v-text-field
@@ -111,18 +119,18 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
+              @click="findId"
               color="green darken-1"
               text
-              @click="dialog = false"
             >
-              Close
+              이메일 인증
             </v-btn>
             <v-btn
               @click="findId"
               color="green darken-1"
               text
             >
-              비밀번호 찾기
+              비밀번호 변경
             </v-btn>
           </v-card-actions>
         </v-card>

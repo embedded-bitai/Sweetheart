@@ -99,10 +99,12 @@ public class MemberServiceImpl implements MemberService {
 //
 //        repository.save(mem);
 //    }
-//    @Override
-//    public void remove(Long userNo) throws Exception {
-//        repository.deleteById(userNo);
-//    }
+
+    @Override
+    public void remove(Long userNo) throws Exception {
+        repository.deleteById(userNo);
+    }
+
 //    @Override
 //    public List<Member> list() throws Exception {
 //        List<Object[]> valArrays = repository.listAllMember();
@@ -186,8 +188,8 @@ public class MemberServiceImpl implements MemberService {
 
             long end = System.currentTimeMillis();
 
-            session.setAttribute(""+userEmail, result);
-            log.info("실행 시간: " + (end - start )/1000.0);
+            session.setAttribute(userEmail, result);
+            log.info("userEmail: " + userEmail + "result: " + result + "실행 시간: " + (end - start )/1000.0);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -197,6 +199,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public boolean emailCertification(HttpSession session, String userEmail, int inputCode) throws Exception {
+        log.info("emailCertification() - userEmail: " + userEmail + ", inputCode: " + inputCode);
         try {
             int generationCode = (int)session.getAttribute(userEmail);
 
@@ -208,5 +211,11 @@ public class MemberServiceImpl implements MemberService {
         } catch (Exception e) {
             throw  e;
         }
+    }
+
+    @Override
+    public void makeFriends(String userId) throws Exception {
+        log.info("makeFriends() - userId: " + userId);
+
     }
 }

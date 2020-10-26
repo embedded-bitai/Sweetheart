@@ -51,10 +51,10 @@
 
 <script>
 // @ is an alias to /src
-import FirstLeft from '@/components/FirstLayout/FirstLeft'
-import FirstRight from '@/components/FirstLayout/FirstRight'
-import SecondLeft from '@/components/FirstLayout/SecondLeft'
-import SecondRight from '@/components/FirstLayout/SecondRight'
+import FirstLeft from '@/components/LoginLayout/FirstLeft'
+import FirstRight from '@/components/LoginLayout/FirstRight'
+import SecondLeft from '@/components/LoginLayout/SecondLeft'
+import SecondRight from '@/components/LoginLayout/SecondRight'
 import axios from 'axios'
 import { mapActions } from 'vuex'
 
@@ -151,8 +151,12 @@ export default {
     onCertNumCheck (payload) {
       console.log('payload - certNum: ' + payload.certNum + ', email: ' + payload.userEmail)
       const { certNum, userEmail } = payload
-      axios.post('http://localhost:7777/users/email/certification',
-        { certNum, userEmail })
+      axios.get('http://localhost:7777/users/email/certification', {
+        params: {
+          certNum: certNum,
+          userEmail: userEmail
+        }
+      })
         .then(res => {
           alert('본인인증 성공')
           console.log('email check() res: ' + res)
