@@ -61,11 +61,6 @@
       </v-tab-item>
       <v-tab-item style="width: 100%; height: 100vh">
         <v-navigation-drawer dark clipped>
-          <v-list>
-            <v-list-item @click="gotoMyPage">
-              <v-list-item-title @click="gotoMyPage">My Page</v-list-item-title>
-            </v-list-item>
-          </v-list>
         </v-navigation-drawer>
       </v-tab-item>
     </v-tabs>
@@ -82,9 +77,6 @@ export default {
   methods: {
     gotoDashboard () {
       this.$emit('gotoDashboard')
-    },
-    gotoMyPage () {
-      this.$emit('gotoMyPage')
     }
   }
 }

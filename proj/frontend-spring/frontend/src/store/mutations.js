@@ -11,7 +11,6 @@ import {
   CRAWLSTART,
   FINDONE,
   CRAWLSTARTNAVER,
-  ADDSEARCH,
   SET_MY_PROFILE,
   DESTROY_MY_PROFILE
 } from './mutation-types'
@@ -28,11 +27,6 @@ export default {
     if (myProfile) {
       state.myProfile = myProfile
     }
-  },
-  [ADDSEARCH] (state, payload) {
-    console.log('mutations - ADDSEARCH(): ' + payload)
-    const { content } = payload
-    state.searchList.push({ content, done: false })
   },
   [CRAWLSTARTNAVER] (state, payload) {
     state.naverLists = payload
