@@ -1,5 +1,4 @@
 import {
-  FETCH_BOARD,
   SET_ACCESS_TOKEN,
   SET_MY_INFO,
   /* eslint-disable no-unused-vars */
@@ -7,7 +6,6 @@ import {
   DESTROY_MY_INFO,
   /* Crawl */
   CRAWLSTART,
-  CRAWLSTARTNAVER,
   SET_MY_PROFILE,
   DESTROY_MY_PROFILE
 } from './mutation-types'
@@ -16,33 +14,14 @@ import axios from 'axios'
 import router from '../router'
 
 export default {
-  async crawlFindIT ({ commit }, category) {
-    console.log('category: ' + category)
-    axios.get('http://localhost:7777/' + `${category}`)
+  async crawlNews ({ commit }) {
+    console.log('category: ')
+    axios.get('http://localhost:7777/crawlDaumNews')
       .then(({ data }) => {
         commit(CRAWLSTART, data)
-        if (window.location.pathname !== '/CrawlCategory') {
-          router.push('/CrawlCategory')
+        if (window.location.pathname !== '/MainDashBoard') {
+          router.push('/MainDashBoard')
         }
-      })
-  },
-  async crawlFindNaverIT ({ commit }) {
-    console.log('crawlFindNaverIT()')
-    axios.get('http://localhost:7777/naver/')
-      .then(({ data }) => {
-        commit(CRAWLSTARTNAVER, data)
-        console.log(data)
-        if (window.location.pathname !== '/CrawlCategory') {
-          router.push('/CrawlCategory')
-        }
-      })
-  },
-  fetchBoard ({ commit }, boardNo) {
-    console.log('fetchBoard ' + commit + ', boardNo = ' + boardNo)
-    return axios.get(`http://localhost:7777/boards/${boardNo}`)
-      .then(res => {
-        console.log('fetchBoard - res: ' + res.data)
-        commit(FETCH_BOARD, res.data)
       })
   },
   login ({ commit }, payload) {

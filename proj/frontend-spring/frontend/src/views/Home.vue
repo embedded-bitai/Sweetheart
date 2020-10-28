@@ -82,7 +82,7 @@ export default {
     decreaseStep () {
       this.step--
     },
-    ...mapActions(['login', 'findId']),
+    ...mapActions(['login']),
     onCheckId (payload) {
       console.log('payload: ' + payload.userId)
       const { userId } = payload
@@ -115,7 +115,7 @@ export default {
       console.log('Login on-sign-in() - ' + payload.userId)
       this.login(payload).then(res => {
         console.log('onSignIn() res: ' + res)
-        this.$router.push({ name: 'ScrollTestPage' })
+        this.$router.push({ name: 'MainDashBoard' })
       }).catch(err => {
         console.log(err)
         alert('가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.')
