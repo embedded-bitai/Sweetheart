@@ -5,20 +5,47 @@ import {
   DESTROY_ACCESS_TOKEN,
   DESTROY_MY_INFO,
   /* Crawl */
-  CRAWLSTART,
+  CRAWLSTARTDAUM,
+  CRAWLSTARTNAVER,
   SET_MY_PROFILE,
-  DESTROY_MY_PROFILE
+  DESTROY_MY_PROFILE,
+  CRAWLSTARTBITCAMP
 } from './mutation-types'
 
 import axios from 'axios'
 import router from '../router'
 
 export default {
-  async crawlNews ({ commit }) {
-    console.log('category: ')
+  data () {
+    return {
+      userNo: this.$store.state.userNo
+    }
+  },
+  async crawlBitCamp ({ commit }) {
+    console.log('crawlBitCamp() ')
+    axios.get('http://localhost:7777/crawlBitCamp')
+      .then(({ data }) => {
+        commit(CRAWLSTARTBITCAMP, data)
+        if (window.location.pathname !== '/MainDashBoard') {
+          router.push('/MainDashBoard')
+        }
+      })
+  },
+  async crawlDaumNews ({ commit }) {
+    console.log('crawlDaumNews() ')
     axios.get('http://localhost:7777/crawlDaumNews')
       .then(({ data }) => {
-        commit(CRAWLSTART, data)
+        commit(CRAWLSTARTDAUM, data)
+        if (window.location.pathname !== '/MainDashBoard') {
+          router.push('/MainDashBoard')
+        }
+      })
+  },
+  async crawlNaverNews ({ commit }) {
+    console.log('crawlNaverNews() ')
+    axios.get('http://localhost:7777/crawlNaverNews')
+      .then(({ data }) => {
+        commit(CRAWLSTARTNAVER, data)
         if (window.location.pathname !== '/MainDashBoard') {
           router.push('/MainDashBoard')
         }
@@ -45,13 +72,17 @@ export default {
           console.log('After Get Auth Info: ' + res.data)
           commit(SET_MY_INFO, res.data)
 
-          const userNo = res.data.userNo
+          this.userNo = res.data.userNo
 
-          console.log('userNo: ' + userNo)
-          return axios.get(`http://localhost:7777/users/${userNo}`)
+          console.log('userNo: ' + this.userNo)
+          return axios.get('http://localhost:7777/users/myInfo')
         }).then(res => {
-          console.log('my account info save')
+          console.log('After Get My Profile: ' + res.data)
           commit(SET_MY_PROFILE, res.data)
+
+          const userName = res.data.username
+
+          console.log('userName: ' + userName)
         })
       })
   },
@@ -60,6 +91,10 @@ export default {
     return axios.get('http://localhost:7777/users/myAuthInfo')
       .then(res => {
         commit(SET_MY_INFO, res.data)
+
+        return axios.get('http://localhost:7777/users/myInfo')
+      }).then(res => {
+        commit(SET_MY_PROFILE, res.data)
       })
   },
   logout ({ commit }) {

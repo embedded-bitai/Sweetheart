@@ -1,23 +1,19 @@
 export default {
   editingId: 0,
   filter: null,
-  // Vue Board
-  boards: [],
-  board: null,
   // For Login
   accessToken: '',
   myInfo: null,
-  // Crawling
-  lists: [],
-  news: [],
-  homeNews: [],
-  savedNews: [],
-  savedNewsContents: [],
-  // Project Crwaling
+  // Crawling Daum News
+  daumLists: [],
+  // Crawling Naver News
   naverLists: [],
+  // Crawling bitcamp
+  bitCampLists: [],
   // search
   searchData: 1234,
   selected: null,
   // my profile
-  myProfile: []
+  myProfile: null,
+  userNo: null
 }

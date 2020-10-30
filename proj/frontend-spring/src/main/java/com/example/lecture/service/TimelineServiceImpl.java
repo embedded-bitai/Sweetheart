@@ -21,6 +21,7 @@ public class TimelineServiceImpl implements TimelineService{
 
         TimelinePost timelinePost = new TimelinePost();
         timelinePost.setUserNo(timeline.getUserNo());
+        timelinePost.setUserName(timeline.getUserName());
         timelinePost.setImage(timeline.getImage());
         timelinePost.setContent(timeline.getContent());
 

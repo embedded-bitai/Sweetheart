@@ -2,34 +2,17 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 
-import ScrollTestPage from '@/views/ScrollTestPage'
-
 import MainDashBoard from '@/components/FirstLayout/MainDashBoard'
 import FirstPage from '@/views/FirstPage'
-import test from '@/components/FirstLayout/test'
+import MyPage from '@/components/MyPage/MyPage'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/ScrollTestPage',
-    name: 'ScrollTestPage',
-    components: {
-      default: ScrollTestPage
-    },
-    props: {
-      default: true
-    }
-  },
-  {
     path: '/',
     name: 'Home',
     component: Home
-  },
-  {
-    path: '/test',
-    name: 'test',
-    component: test
   },
   {
     path: '/MainDashBoard',
@@ -40,6 +23,11 @@ const routes = [
     path: '/firstPage',
     name: 'FirstPage',
     component: FirstPage
+  },
+  {
+    path: '/MyPage',
+    name: 'MyPage',
+    component: MyPage
   }
 ]
 

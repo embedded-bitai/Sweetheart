@@ -8,4 +8,12 @@
   </div>
 </template>
 
+<script>
+export default {
+  created () {
+    this.$store.dispatch('crawlBitCamp')
+  }
+}
+</script>
+
 <style src="@/assets/firstLayout.css" scoped/>

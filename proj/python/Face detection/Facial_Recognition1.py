@@ -10,7 +10,6 @@ import shutil
 
 #얼굴 저장 함수
 face_dirs = 'faces/'
-
 face_classifier = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 #얼굴 검출 함수
@@ -18,10 +17,10 @@ def face_extractor(img):
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     faces = face_classifier.detectMultiScale(gray,1.3,5)
     #얼굴이 없으면 패스!
-    if faces is():
+    if faces is ():
         return None
     # 얼굴이 있으면 얼굴 부위만 이미지로 만든다
-    for(x,y,w,h) in faces:
+    for(x, y, w, h) in faces:
         cropped_face = img[y:y+h, x:x+w]
 
     return cropped_face
@@ -29,11 +28,14 @@ def face_extractor(img):
 # 카메라 ON
 def face_detection():
     print('face_detection()')
-    cap = cv2.VideoCapture(0)
+    cam = cv2.VideoCapture(0)
     count = 0
-    while True:
+    fps = 30
+    delay = int(1000 / fps)
+
+    while cam.isOpened():
         # 카메라로 부터 사진 한장 읽어 오기
-        ret, frame = cap.read()
+        ret, frame = cam.read()
         # 얼굴 감지 하여 얼굴만 가져오기
         if face_extractor(frame) is not None:
             count += 1
@@ -51,10 +53,13 @@ def face_detection():
             print("Face not Found")
             pass
 
-        if cv2.waitKey(1) == 13 or count == 100:
+        if count == 100:
             break
 
-    cap.release()
+        if cv2.waitKey(delay) & 0xFF == ord('q'):
+            break
+
+    cam.release()
     cv2.destroyAllWindows()
     print('Colleting Samples Complete!!!')
 
@@ -88,7 +93,7 @@ def face_learning():
 
     return "learning"
 
-def face_detector(img, size = 0.5):
+def face_detector(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = face_classifier.detectMultiScale(gray, 1.3, 5)
 
@@ -96,7 +101,8 @@ def face_detector(img, size = 0.5):
         return img, []
 
     for (x, y, w, h) in faces:
-        cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 255), 2)
+        cv2.rectangle(img, (x, y),
+                      (x + w, y + h), (0, 255, 255), 2)
         roi = img[y:y + h, x:x + w]
         roi = cv2.resize(roi, (200, 200))
 
@@ -119,13 +125,17 @@ def face_login():
     model = cv2.face.LBPHFaceRecognizer_create()
     model.train(np.asarray(Training_Data), np.asarray(Labels))
 
+    fps = 30
+    delay = int(1000 / fps)
+
     # 카메라 열기
-    cap = cv2.VideoCapture(0)
-    while True:
+    cam = cv2.VideoCapture(0)
+    while cam.isOpened():
         # 카메라로 부터 사진 한장 읽기
-        ret, frame = cap.read()
+        ret, frame = cam.read()
+        final_frame = frame
         # 얼굴 검출 시도
-        image, face = face_detector(frame)
+        image, face = face_detector(final_frame)
 
         try:
             # 검출된 사진을 흑백으로 변환
@@ -142,24 +152,26 @@ def face_login():
             # 80 이상이면 동일 인물(수정가능)
             if confidence > 80:
                 cv2.putText(image, "Unlocked", (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
-                cv2.imshow('Face Cropper', image)
+                cv2.imshow('Face Login', image)
                 break
-
             else:
-                # 87 이하면 unlocked
+                # 80 이하면 locked
                 cv2.putText(image, "Locked", (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
-                cv2.imshow('Face Cropper', image)
+                cv2.imshow('Face Login', image)
 
         except:
             # 얼굴 검출 안됨
             cv2.putText(image, "Face Not Found", (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
-            cv2.imshow('Face Cropper', image)
+            cv2.imshow('Face Login', image)
             pass
 
-        if cv2.waitKey(1) == 13:
+        # 키보드 입력 대기 함수, 입력 값이 엔터일 경우 종료
+        if cv2.waitKey(delay) & 0xFF == ord('q'):
             break
 
-    cap.release()
+    # 오픈한 캡쳐 객체 해제
+    cam.release()
+    # 화면에 나타는 윈도우 종료
     cv2.destroyAllWindows()
     print('Face Login Success!!!!')
 
