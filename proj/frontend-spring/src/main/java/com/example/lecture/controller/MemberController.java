@@ -138,23 +138,6 @@ public class MemberController {
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 
-//    @PostMapping("/checkEmail")
-//    public ResponseEntity<String> checkEmail(@Validated @RequestBody String userEmail) throws Exception {
-//        log.info("checkId() - userEmail: " + userEmail);
-//        String[] userIdArr = userEmail.split(":");
-//        String userIdString1 = userIdArr[1].replace("\"", "");
-//        String userIdString2 = userIdString1.replace("}", "");
-//
-//        if (service.checkId(userIdString2) == false) {
-//            return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
-//        }
-//
-//        String message = messageSource.getMessage("common.cannotCheckUserId",
-//                null, Locale.KOREAN);
-//
-//        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
-//    }
-
     @GetMapping("/myAuthInfo")
     public ResponseEntity<MemberAuth> getMyAuthInfo(
             @RequestHeader (name="Authorization") String header) throws Exception {
@@ -165,6 +148,18 @@ public class MemberController {
         log.info("auth: " + auth);
 
         return new ResponseEntity<>(auth, HttpStatus.OK);
+    }
+
+    @GetMapping("/myInfo")
+    public ResponseEntity<List<Member>> getMyInfo(
+            @RequestHeader (name="Authorization") String header) throws Exception {
+        Long userNo = AuthUtil.getUserNo(header);
+        log.info("read() - userNo: " + userNo);
+        List<Member> member = service.read(userNo);
+
+        log.info("member: " + member);
+
+        return new ResponseEntity<>(member, HttpStatus.OK);
     }
 
     @GetMapping("/findID")
@@ -196,10 +191,7 @@ public class MemberController {
 
     @GetMapping("/email/certification")
     public boolean emailCertification(@RequestParam(value = "certNum") String certNum, @RequestParam(value = "userEmail") String userEmail) throws Exception {
-//        log.info("emailCertification() - request: + " + request);
         log.info("emailCertification() - certNum: " + certNum + ", userEmail: " + userEmail);
-
-//        HttpSession session = request.getSession();
 
         boolean result = service.emailCertification(sessionResult, userEmail, Integer.parseInt(certNum));
 

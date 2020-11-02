@@ -2,7 +2,8 @@
 .dashBoard{
     background-color: darkgrey;
     width: 100%;
-    height: 200vh;
+    min-height: 100vh;
+    height: auto;
 }
 /* DashBoard */
 
@@ -34,11 +35,6 @@
 }
 /* rightSideAd */
 
-#cardTestOne {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 #cardTestTwo {
     display: flex;
     flex-direction: column;

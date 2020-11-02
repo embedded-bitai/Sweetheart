@@ -10,11 +10,14 @@
         <LeftSideMenu></LeftSideMenu>
       </v-flex>
       <v-flex id="middle_area" style="width: 60%">
-        <TimeLine></TimeLine>
+        <TimeLinePost></TimeLinePost>
+        <MyTimeLineFeed></MyTimeLineFeed>
       </v-flex>
       <v-flex id="right_area" style="width: 50%">
-        <RightSideNews></RightSideNews>
-        <RightSideAd></RightSideAd>
+        <div style="position: sticky; top: 10px">
+          <RightSideNews></RightSideNews>
+          <RightSideAd></RightSideAd>
+        </div>
       </v-flex>
     </v-layout>
   </div>
@@ -22,15 +25,17 @@
 <script>
 import AppBar from '@/components/FirstLayout/AppBar'
 import LeftSideMenu from '@/components/FirstLayout/LeftSideMenu'
-import TimeLine from '@/components/FirstLayout/TimeLine'
+import MyTimeLineFeed from '@/components/FirstLayout/MyTimeLineFeed'
 import RightSideNews from '@/components/FirstLayout/RightSideNews'
 import RightSideAd from '@/components/FirstLayout/RightSideAd'
+import TimeLinePost from '@/components/FirstLayout/TimeLinePost'
 
 export default {
   components: {
+    TimeLinePost,
     AppBar,
     LeftSideMenu,
-    TimeLine,
+    MyTimeLineFeed,
     RightSideNews,
     RightSideAd
   }

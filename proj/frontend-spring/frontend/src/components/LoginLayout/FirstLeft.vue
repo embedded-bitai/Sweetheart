@@ -24,6 +24,7 @@
             v-model="userPassword"
             :rules="[v => !!v || 'Password is required']"
             type="password"
+            v-on:keyup.enter="signIn"
           />
           <v-dialog
             v-model="dialog"
@@ -181,12 +182,16 @@ export default {
   },
   methods: {
     increaseStep () {
+      this.userId = ''
+      this.userPassword = ''
       this.$emit('increaseStep', null)
     },
     signIn () {
       console.log('Login sign-in()')
       const { userId, userPassword } = this
       this.$emit('signIn', { userId, userPassword })
+      this.userId = ''
+      this.userPassword = ''
     },
     findId () {
       console.log('find id() - searchName: ' + this.searchName + ', serachEmail: ' + this.searchEmail)
